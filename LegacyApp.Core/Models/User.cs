@@ -31,5 +31,10 @@ namespace LegacyApp.Core.Models
         {
             return Name.GetHashCode();
         }
+
+        public bool IsFriendWith(User alice)
+        {
+            return false;
+        }
     }
 }
