@@ -13,13 +13,9 @@ namespace LegacyApp.Core.Services
             if (loggedUser == null)
                 throw new UserNotLoggedInException();
 
-            var tripList = new List<Trip>();
-            if (user.IsFriendWith(loggedUser))
-            {
-                tripList = FindTripsByUser(user);
-            }
-
-            return tripList;
+            return user.IsFriendWith(loggedUser)
+                ? FindTripsByUser(user)
+                : new List<Trip>();
         }
 
         protected virtual List<Trip> FindTripsByUser(User user)
