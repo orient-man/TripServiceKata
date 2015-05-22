@@ -9,21 +9,14 @@ namespace LegacyApp.Core.Services
     {
         public List<Trip> GetTripsByUser(User user)
         {
-            List<Trip> tripList = new List<Trip>();
-            User loggedUser = null;
-
-            loggedUser = GetLoggedInUser();
-
-            if (loggedUser != null)
-            {
-                if (user.IsFriendWith(loggedUser))
-                {
-                    tripList = FindTripsByUser(user);
-                }
-            }
-            else
-            {
+            var loggedUser = GetLoggedInUser();
+            if (loggedUser == null)
                 throw new UserNotLoggedInException();
+
+            var tripList = new List<Trip>();
+            if (user.IsFriendWith(loggedUser))
+            {
+                tripList = FindTripsByUser(user);
             }
 
             return tripList;
