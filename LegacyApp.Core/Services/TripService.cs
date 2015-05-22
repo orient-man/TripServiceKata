@@ -18,16 +18,6 @@ namespace LegacyApp.Core.Services
                 : NoTrips();
         }
 
-        protected virtual List<Trip> FindTripsByUser(User user)
-        {
-            return TripDao.FindTripsByUser(user);
-        }
-
-        private static List<Trip> NoTrips()
-        {
-            return new List<Trip>();
-        }
-
         protected virtual User GetLoggedInUser()
         {
             User loggedUser = null;
@@ -37,6 +27,16 @@ namespace LegacyApp.Core.Services
                     HttpContext.Current.User.Identity.Name);
             }
             return loggedUser;
+        }
+
+        protected virtual List<Trip> FindTripsByUser(User user)
+        {
+            return TripDao.FindTripsByUser(user);
+        }
+
+        private static List<Trip> NoTrips()
+        {
+            return new List<Trip>();
         }
     }
 }
