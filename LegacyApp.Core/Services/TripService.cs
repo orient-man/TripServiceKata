@@ -11,22 +11,12 @@ namespace LegacyApp.Core.Services
         {
             List<Trip> tripList = new List<Trip>();
             User loggedUser = null;
-            bool isFriend = false;
 
             loggedUser = GetLoggedInUser();
 
             if (loggedUser != null)
             {
-                foreach (User friend in user.Friends)
-                {
-                    if (friend.Equals(loggedUser))
-                    {
-                        isFriend = true;
-                        break;
-                    }
-                }
-
-                if (isFriend)
+                if (user.IsFriendWith(loggedUser))
                 {
                     tripList = FindTripsByUser(user);
                 }
