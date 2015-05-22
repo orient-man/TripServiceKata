@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using LegacyApp.Core.Models;
 using LegacyApp.Core.Services;
@@ -15,6 +16,7 @@ namespace LegacyApp.Core.Tests
         private readonly User RegisteredUser = new User { Name = "Alice" };
         private readonly User AnotherUser = new User { Name = "Bob" };
         private readonly Trip ToBrazil = new Trip();
+        private readonly Trip ToLondon = new Trip();
         private TripService service;
 
         [SetUp]
@@ -49,8 +51,28 @@ namespace LegacyApp.Core.Tests
             service.GetTripsByUser(friend).Should().BeEmpty();
         }
 
-        class TestingTripService : TripService
+        [Test]
+        public void should_return_friend_trips_when_users_are_friends()
         {
+            // arrange
+            var friend = new User();
+            friend.Friends.Add(AnotherUser);
+            friend.Friends.Add(RegisteredUser);
+            friend.Trips.Add(ToBrazil);
+            friend.Trips.Add(ToLondon);
+
+            // act & assert
+            service.GetTripsByUser(friend).Should().HaveCount(2);
+        }
+
+
+        private class TestingTripService : TripService
+        {
+            protected override List<Trip> FindTripsByUser(User user)
+            {
+                return user.Trips;
+            }
+
             protected override User GetLoggedInUser()
             {
                 return loggedInUser;
