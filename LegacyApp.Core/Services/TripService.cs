@@ -15,12 +15,17 @@ namespace LegacyApp.Core.Services
 
             return user.IsFriendWith(loggedUser)
                 ? FindTripsByUser(user)
-                : new List<Trip>();
+                : NoTrips();
         }
 
         protected virtual List<Trip> FindTripsByUser(User user)
         {
             return TripDao.FindTripsByUser(user);
+        }
+
+        private static List<Trip> NoTrips()
+        {
+            return new List<Trip>();
         }
 
         protected virtual User GetLoggedInUser()
