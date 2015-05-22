@@ -10,7 +10,6 @@ namespace LegacyApp.Core.Tests
     [TestFixture]
     public class TripServiceTests
     {
-        private static User loggedInUser;
         private readonly User UnusedUser = null;
         private readonly User Guest = null;
         private readonly User RegisteredUser = new UserBuilder().Build();
@@ -23,17 +22,13 @@ namespace LegacyApp.Core.Tests
         public void SetUpEachTest()
         {
             service = new TestingTripService();
-            loggedInUser = RegisteredUser;
         }
 
         [Test]
         public void should_throw_an_exception_when_not_logged_in()
         {
-            // arrange
-            loggedInUser = Guest;
-
             // act
-            Action act = () => service.GetTripsByUser(UnusedUser);
+            Action act = () => service.GetTripsByUser(UnusedUser, Guest);
 
             // assert
             act.ShouldThrow<UserNotLoggedInException>();
@@ -47,7 +42,7 @@ namespace LegacyApp.Core.Tests
                 new UserBuilder().FriendsWith(AnotherUser).WithTrips(ToBrazil).Build();
 
             // act & assert
-            service.GetTripsByUser(friend).Should().BeEmpty();
+            service.GetTripsByUser(friend, RegisteredUser).Should().BeEmpty();
         }
 
         [Test]
@@ -60,7 +55,7 @@ namespace LegacyApp.Core.Tests
                 .Build();
 
             // act & assert
-            service.GetTripsByUser(friend).Should().HaveCount(2);
+            service.GetTripsByUser(friend, RegisteredUser).Should().HaveCount(2);
         }
 
         private class TestingTripService : TripService
@@ -68,11 +63,6 @@ namespace LegacyApp.Core.Tests
             protected override List<Trip> FindTripsByUser(User user)
             {
                 return user.Trips;
-            }
-
-            protected override User GetLoggedInUser()
-            {
-                return loggedInUser;
             }
         }
     }
