@@ -13,8 +13,8 @@ namespace LegacyApp.Core.Tests
         private static User loggedInUser;
         private readonly User UnusedUser = null;
         private readonly User Guest = null;
-        private readonly User RegisteredUser = new User { Name = "Alice" };
-        private readonly User AnotherUser = new User { Name = "Bob" };
+        private readonly User RegisteredUser = new UserBuilder().Build();
+        private readonly User AnotherUser = new UserBuilder().Build();
         private readonly Trip ToBrazil = new Trip();
         private readonly Trip ToLondon = new Trip();
         private TripService service;
@@ -43,9 +43,8 @@ namespace LegacyApp.Core.Tests
         public void should_not_return_any_trips_when_users_are_not_friends()
         {
             // arrange
-            var friend = new User();
-            friend.Friends.Add(AnotherUser);
-            friend.Trips.Add(ToBrazil);
+            var friend =
+                new UserBuilder().FriendsWith(AnotherUser).WithTrips(ToBrazil).Build();
 
             // act & assert
             service.GetTripsByUser(friend).Should().BeEmpty();
@@ -55,16 +54,14 @@ namespace LegacyApp.Core.Tests
         public void should_return_friend_trips_when_users_are_friends()
         {
             // arrange
-            var friend = new User();
-            friend.Friends.Add(AnotherUser);
-            friend.Friends.Add(RegisteredUser);
-            friend.Trips.Add(ToBrazil);
-            friend.Trips.Add(ToLondon);
+            var friend = new UserBuilder()
+                .FriendsWith(AnotherUser, RegisteredUser)
+                .WithTrips(ToBrazil, ToLondon)
+                .Build();
 
             // act & assert
             service.GetTripsByUser(friend).Should().HaveCount(2);
         }
-
 
         private class TestingTripService : TripService
         {
