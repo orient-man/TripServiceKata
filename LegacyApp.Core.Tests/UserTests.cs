@@ -19,5 +19,15 @@ namespace LegacyApp.Core.Tests
             // act & assert
             user.IsFriendWith(Alice).Should().BeFalse();
         }
+
+        [Test]
+        public void should_inform_when_user_are_friends()
+        {
+            // arrange
+            var user = new UserBuilder().FriendsWith(Alice, Bob).Build();
+
+            // act & assert
+            user.IsFriendWith(Alice).Should().BeTrue();
+        }
     }
 }
