@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LegacyApp.Core.Models
 {
@@ -32,9 +33,9 @@ namespace LegacyApp.Core.Models
             return Name.GetHashCode();
         }
 
-        public bool IsFriendWith(User alice)
+        public bool IsFriendWith(User user)
         {
-            return false;
+            return Friends.Any(friend => friend.Equals(user));
         }
     }
 }
