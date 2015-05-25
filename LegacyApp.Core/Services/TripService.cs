@@ -8,10 +8,6 @@ namespace LegacyApp.Core.Services
     {
         private readonly ITripDao tripDao;
 
-        public TripService() : this(new TripDao())
-        {
-        }
-
         public TripService(ITripDao tripDao)
         {
             this.tripDao = tripDao;
@@ -23,13 +19,8 @@ namespace LegacyApp.Core.Services
                 throw new UserNotLoggedInException();
 
             return user.IsFriendWith(loggedInUser)
-                ? FindTripsByUser(user)
+                ? tripDao.FindTripsByUser(user)
                 : NoTrips();
-        }
-
-        protected virtual List<Trip> FindTripsByUser(User user)
-        {
-            return tripDao.FindTripsByUser(user);
         }
 
         private static List<Trip> NoTrips()

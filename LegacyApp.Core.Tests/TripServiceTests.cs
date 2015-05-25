@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using FluentAssertions;
+using LegacyApp.Core.Dao;
 using LegacyApp.Core.Models;
 using LegacyApp.Core.Services;
+using Moq;
 using NUnit.Framework;
 
 namespace LegacyApp.Core.Tests
@@ -16,12 +17,14 @@ namespace LegacyApp.Core.Tests
         private readonly User AnotherUser = new UserBuilder().Build();
         private readonly Trip ToBrazil = new Trip();
         private readonly Trip ToLondon = new Trip();
+        private ITripDao tripDao;
         private TripService service;
 
         [SetUp]
         public void SetUpEachTest()
         {
-            service = new TestingTripService();
+            tripDao = Mock.Of<ITripDao>();
+            service = new TripService(tripDao);
         }
 
         [Test]
@@ -53,17 +56,12 @@ namespace LegacyApp.Core.Tests
                 .FriendsWith(AnotherUser, RegisteredUser)
                 .WithTrips(ToBrazil, ToLondon)
                 .Build();
+            Mock.Get(tripDao)
+                .Setup(o => o.FindTripsByUser(friend))
+                .Returns(friend.Trips);
 
             // act & assert
             service.GetTripsByUser(friend, RegisteredUser).Should().HaveCount(2);
-        }
-
-        private class TestingTripService : TripService
-        {
-            protected override List<Trip> FindTripsByUser(User user)
-            {
-                return user.Trips;
-            }
         }
     }
 }
