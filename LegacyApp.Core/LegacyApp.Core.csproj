@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dao\ITripDao.cs" />
     <Compile Include="Dao\TripDao.cs" />
     <Compile Include="Dao\UserDao.cs" />
     <Compile Include="Models\Trip.cs" />
