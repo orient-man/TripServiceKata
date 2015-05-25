@@ -6,6 +6,17 @@ namespace LegacyApp.Core.Services
 {
     public class TripService
     {
+        private readonly ITripDao tripDao;
+
+        public TripService() : this(new TripDao())
+        {
+        }
+
+        public TripService(ITripDao tripDao)
+        {
+            this.tripDao = tripDao;
+        }
+
         public List<Trip> GetTripsByUser(User user, User loggedInUser)
         {
             if (loggedInUser == null)
@@ -18,7 +29,7 @@ namespace LegacyApp.Core.Services
 
         protected virtual List<Trip> FindTripsByUser(User user)
         {
-            return TripDao.FindTripsByUser(user);
+            return tripDao.FindTripsByUser(user);
         }
 
         private static List<Trip> NoTrips()
