@@ -13,13 +13,13 @@ namespace LegacyApp.Core.Services
             this.tripDao = tripDao;
         }
 
-        public List<Trip> GetTripsByUser(User user, User loggedInUser)
+        public List<Trip> GetFriendTrips(User friend, User loggedInUser)
         {
             if (loggedInUser == null)
                 throw new UserNotLoggedInException();
 
-            return user.IsFriendWith(loggedInUser)
-                ? tripDao.FindTripsByUser(user)
+            return friend.IsFriendWith(loggedInUser)
+                ? tripDao.FindTripsByUser(friend)
                 : NoTrips();
         }
 

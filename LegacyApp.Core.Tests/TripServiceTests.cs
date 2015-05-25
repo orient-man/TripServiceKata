@@ -33,7 +33,7 @@ namespace LegacyApp.Core.Tests
             var service = kernel.Get<TripService>();
 
             // act
-            Action act = () => service.GetTripsByUser(UnusedUser, Guest);
+            Action act = () => service.GetFriendTrips(UnusedUser, Guest);
 
             // assert
             act.ShouldThrow<UserNotLoggedInException>();
@@ -48,7 +48,7 @@ namespace LegacyApp.Core.Tests
                 new UserBuilder().FriendsWith(AnotherUser).WithTrips(ToBrazil).Build();
 
             // act & assert
-            service.GetTripsByUser(friend, RegisteredUser).Should().BeEmpty();
+            service.GetFriendTrips(friend, RegisteredUser).Should().BeEmpty();
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace LegacyApp.Core.Tests
             var service = kernel.Get<TripService>();
 
             // act & assert
-            service.GetTripsByUser(friend, RegisteredUser).Should().HaveCount(2);
+            service.GetFriendTrips(friend, RegisteredUser).Should().HaveCount(2);
         }
     }
 }
